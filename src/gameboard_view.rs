@@ -1,10 +1,10 @@
 //! Gameboard view.
 
-use graphics::character::CharacterCache;
 use graphics::types::Color;
+use graphics::character::CharacterCache;
 use graphics::{Context, Graphics};
 
-use crate::gameboard_controller::GameboardController;
+use crate::GameboardController;
 
 /// Stores gameboard view settings.
 pub struct GameboardViewSettings {
@@ -63,7 +63,9 @@ pub struct GameboardView {
 impl GameboardView {
     /// Creates a new gameboard view.
     pub fn new(settings: GameboardViewSettings) -> GameboardView {
-        GameboardView { settings: settings }
+        GameboardView {
+            settings: settings,
+        }
     }
 
     /// Draw gameboard.
@@ -72,39 +74,32 @@ impl GameboardView {
         controller: &GameboardController,
         glyphs: &mut C,
         c: &Context,
-        g: &mut G,
-    ) where
-        C: CharacterCache<Texture = G::Texture>,
+        g: &mut G
+    )
+        where C: CharacterCache<Texture = G::Texture>
     {
         use graphics::{Image, Line, Rectangle, Transformed};
 
         let ref settings = self.settings;
         let board_rect = [
-            settings.position[0],
-            settings.position[1],
-            settings.size,
-            settings.size,
+            settings.position[0], settings.position[1],
+            settings.size, settings.size,
         ];
 
-        // Draw board background
-        Rectangle::new(settings.background_color).draw(board_rect, &c.draw_state, c.transform, g);
+        // Draw board background.
+        Rectangle::new(settings.background_color)
+            .draw(board_rect, &c.draw_state, c.transform, g);
 
         // Draw selected cell background.
         if let Some(ind) = controller.selected_cell {
             let cell_size = settings.size / 9.0;
             let pos = [ind[0] as f64 * cell_size, ind[1] as f64 * cell_size];
             let cell_rect = [
-                settings.position[0] + pos[0],
-                settings.position[1] + pos[1],
-                cell_size,
-                cell_size,
+                settings.position[0] + pos[0], settings.position[1] + pos[1],
+                cell_size, cell_size
             ];
-            Rectangle::new(settings.selected_cell_background_color).draw(
-                cell_rect,
-                &c.draw_state,
-                c.transform,
-                g,
-            );
+            Rectangle::new(settings.selected_cell_background_color)
+                .draw(cell_rect, &c.draw_state, c.transform, g);
         }
 
         // Draw characters.
@@ -115,12 +110,18 @@ impl GameboardView {
                 if let Some(ch) = controller.gameboard.char([i, j]) {
                     let pos = [
                         settings.position[0] + i as f64 * cell_size + 15.0,
-                        settings.position[1] + j as f64 * cell_size + 34.0,
+                        settings.position[1] + j as f64 * cell_size + 34.0
                     ];
                     if let Ok(character) = glyphs.character(34, ch) {
                         let ch_x = pos[0] + character.left();
                         let ch_y = pos[1] - character.top();
-                        text_image.draw(
+                        let image = text_image.src_rect([
+                            character.atlas_offset[0],
+                            character.atlas_offset[1],
+                            character.atlas_size[0],
+                            character.atlas_size[1],
+                        ]);
+                        image.draw(
                             character.texture,
                             &c.draw_state,
                             c.transform.trans(ch_x, ch_y),
@@ -135,9 +136,7 @@ impl GameboardView {
         let cell_edge = Line::new(settings.cell_edge_color, settings.cell_edge_radius);
         for i in 0..9 {
             // Skip lines that are covered by sections.
-            if (i % 3) == 0 {
-                continue;
-            }
+            if (i % 3) == 0 {continue;}
 
             let x = settings.position[0] + i as f64 / 9.0 * settings.size;
             let y = settings.position[1] + i as f64 / 9.0 * settings.size;
@@ -168,11 +167,7 @@ impl GameboardView {
         }
 
         // Draw board edge.
-        Rectangle::new_border(settings.board_edge_color, settings.board_edge_radius).draw(
-            board_rect,
-            &c.draw_state,
-            c.transform,
-            g,
-        );
+        Rectangle::new_border(settings.board_edge_color, settings.board_edge_radius)
+            .draw(board_rect, &c.draw_state, c.transform, g);
     }
 }

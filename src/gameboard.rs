@@ -1,11 +1,9 @@
-#![deny(missing_docs)]
-
-//! Game board logic
+//! Game board logic.
 
 /// Size of game board.
 const SIZE: usize = 9;
 
-/// Stores game board info.
+/// Stores game board information.
 pub struct Gameboard {
     /// Stores the content of the cells.
     /// `0` is an empty cell.

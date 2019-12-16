@@ -4,13 +4,13 @@ use piston::input::GenericEvent;
 
 use crate::Gameboard;
 
-/// Handles events for Sudokuy game.
+/// Handles events for Sudoku game.
 pub struct GameboardController {
     /// Stores the gameboard state.
     pub gameboard: Gameboard,
     /// Selected cell.
     pub selected_cell: Option<[usize; 2]>,
-    /// Stores the last mouse cursor position.
+    /// Stores last mouse cursor position.
     cursor_pos: [f64; 2],
 }
 
@@ -24,14 +24,13 @@ impl GameboardController {
         }
     }
 
-    /// Handles events for this gameboard.
+    /// Handles events.
     pub fn event<E: GenericEvent>(&mut self, pos: [f64; 2], size: f64, e: &E) {
         use piston::input::{Button, Key, MouseButton};
 
         if let Some(pos) = e.mouse_cursor_args() {
             self.cursor_pos = pos;
         }
-
         if let Some(Button::Mouse(MouseButton::Left)) = e.press_args() {
             // Find coordinates relative to upper left corner.
             let x = self.cursor_pos[0] - pos[0];
@@ -44,23 +43,22 @@ impl GameboardController {
                 self.selected_cell = Some([cell_x, cell_y]);
             }
         }
-
-        if let Some(Button::Keyboard(key)) = e.press_args(){
+        if let Some(Button::Keyboard(key)) = e.press_args() {
             if let Some(ind) = self.selected_cell {
+                // Set cell value.
                 match key {
-                    Key::D1=> self.gameboard.set(ind, 1),
-                    Key::D2=> self.gameboard.set(ind, 2),
-                    Key::D3=> self.gameboard.set(ind, 3),
-                    Key::D4=> self.gameboard.set(ind, 4),
-                    Key::D5=> self.gameboard.set(ind, 5),
-                    Key::D6=> self.gameboard.set(ind, 6),
-                    Key::D7=> self.gameboard.set(ind, 7),
-                    Key::D8=> self.gameboard.set(ind, 8),
-                    Key::D9=> self.gameboard.set(ind, 9),
-                    _=>{}
+                    Key::D1 => self.gameboard.set(ind, 1),
+                    Key::D2 => self.gameboard.set(ind, 2),
+                    Key::D3 => self.gameboard.set(ind, 3),
+                    Key::D4 => self.gameboard.set(ind, 4),
+                    Key::D5 => self.gameboard.set(ind, 5),
+                    Key::D6 => self.gameboard.set(ind, 6),
+                    Key::D7 => self.gameboard.set(ind, 7),
+                    Key::D8 => self.gameboard.set(ind, 8),
+                    Key::D9 => self.gameboard.set(ind, 9),
+                    _ => {}
                 }
             }
         }
     }
-
 }
