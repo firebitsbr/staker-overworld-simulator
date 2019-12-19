@@ -3,7 +3,7 @@
 //! Library for simulation of the Zone
 
 /// Module for simulation functions of zone NPCs
-pub mod npc;
+pub mod entity;
 
 /// Sample functions
 pub mod sample {
