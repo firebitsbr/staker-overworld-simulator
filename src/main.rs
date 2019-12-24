@@ -4,8 +4,6 @@
 
 extern crate simulation;
 
-
-
 fn main() {
     println!("Hello, world!");
 }

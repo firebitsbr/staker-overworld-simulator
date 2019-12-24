@@ -1,27 +1,26 @@
-//! Traits and structures that are useful for defining Non-Player Characters, like
+//! Components useful for defining Non-Player Characters, like
 //! monsters, other human characters.
 
-/// NPC trait
-pub trait Npc {
-    /// The full display name of this NPC, including any rank or title
-    fn get_fullname(&self) -> &str;
+use specs::{
+    Component, VecStorage
+};
 
-    /// The nickname of this NPC, if any
-    fn get_nickname(&self) -> &str {
-        self.get_fullname()
-    }
-
-    /// The faction that this  belongs to.
-    fn get_faction(&self) -> &dyn NpcFaction;
+/// Component for entities that have names used for displays
+#[derive(Debug, Component)]
+#[storage(VecStorage)]
+pub struct Named {
+    /// Full name, including any formal title
+    full_name: String,
+    /// Nickname, if any
+    nickname: Option<String>,
 }
 
-/// Interface for retrieving faction info
-pub trait NpcFaction {
-    /// The display name of the faction.
-    fn get_name(&self) -> &str;
-
-    /// Get the current relationship of this faction to another.
-    fn get_relation(&self, other: &dyn NpcFaction) -> FactionRelation;
+/// Component used for entities that belong to a certain faction or
+/// have faction relationships.
+#[derive(Debug, Component)]
+#[storage(VecStorage)]
+pub struct Faction {
+    faction_name: String,
 }
 
 /// The relationship status of a given faction to another.
