@@ -8,7 +8,7 @@ use amethyst::{
     ui::{Anchor, TtfFormat, UiText, UiTransform},
 };
 
-use crate::components::map::Zoomable;
+use crate::components::map::{Zoomable, Pannable};
 
 /// default size of the map
 /// TODO: make this a runtime resource
@@ -72,11 +72,6 @@ fn initialize_map(world: &mut World, map_sprite_sheet_handle: Handle<SpriteSheet
     world
         .create_entity()
         .with(sprite_render)
-        .with(Zoomable {
-            min_zoom: 0.0,
-            max_zoom: 100.0,
-            current_zoom: 50.0,
-        })
         .with(local_transform)
         .build();
 }
@@ -84,11 +79,23 @@ fn initialize_map(world: &mut World, map_sprite_sheet_handle: Handle<SpriteSheet
 fn initialize_camera(world: &mut World) {
     // Setup camera in a way that our screen covers whole arena and (0, 0) is in the bottom left.
     let mut transform = Transform::default();
-    transform.set_translation_xyz(MAP_WIDTH * 0.0, MAP_HEIGHT * 0.0, 1.0);
+    transform.set_translation_xyz(MAP_WIDTH * 0.0, MAP_HEIGHT * 0.0, 1000.0);
 
     world
         .create_entity()
-        .with(Camera::standard_2d(MAP_WIDTH, MAP_HEIGHT))
+        .with(Camera::standard_3d(MAP_WIDTH, MAP_HEIGHT))
         .with(transform)
+        .with(Zoomable {
+            min_zoom: 0.0,
+            max_zoom: 65536.0,
+            zoom_rate: 20.0,
+        })
+        .with(Pannable {
+            pan_rate: 20.0,
+            min_x: 0.0,
+            min_y: 0.0,
+            max_x: 1024.0,
+            max_y: 2048.0,
+        })
         .build();
 }

@@ -27,11 +27,23 @@ impl Component for MapCoords {
 
 #[derive(Debug)]
 pub struct Zoomable {
-    pub min_zoom: f64,
-    pub max_zoom: f64,
-    pub current_zoom: f64,
+    pub min_zoom: f32,
+    pub max_zoom: f32,
+    pub zoom_rate: f32,
 }
 
 impl Component for Zoomable {
+    type Storage = DenseVecStorage<Self>;
+}
+
+pub struct Pannable {
+    pub pan_rate: f32,
+    pub min_x: f32,
+    pub min_y: f32,
+    pub max_x: f32,
+    pub max_y: f32,
+}
+
+impl Component for Pannable {
     type Storage = DenseVecStorage<Self>;
 }

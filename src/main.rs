@@ -8,6 +8,9 @@ use crate::components::*;
 mod backbone;
 use crate::backbone::simulator::Simulator;
 
+mod systems;
+use crate::systems::*;
+
 use amethyst::{
     core::transform::TransformBundle,
     input::{InputBundle, StringBindings},
@@ -31,6 +34,11 @@ fn main() -> amethyst::Result<()> {
 
     // assets config
     let assets_dir = app_root.join("assets");
+    
+    // keyboard bindings
+    let binding_path = app_root.join("config").join("bindings.ron");
+    let input_bundle =
+        InputBundle::<StringBindings>::new().with_bindings_from_file(binding_path)?;
 
     let game_data = GameDataBuilder::default()
         .with_bundle(
@@ -45,16 +53,12 @@ fn main() -> amethyst::Result<()> {
                 // plugin for rendering GUI elements, like the score
                 // .with_plugin(RenderUi::default()),
         )?
+        // Add the inpput bundle which handles keyboard / mouse input
+        .with_bundle(input_bundle)?
         // Add the transform bundle which handles tracking entity positions
-        .with_bundle(TransformBundle::new())?;
-        // .with(PaddleSystem, "paddle_system", &["input_system"])
-        // .with(MoveBallsSystem, "ball_system", &[])
-        // .with(
-        //     BounceSystem,
-        //     "collision_system",
-        //     &["paddle_system", "ball_system"],
-        // )
-        // .with(WinnerSystem, "winner_system", &["ball_system"]);
+        .with_bundle(TransformBundle::new())?
+        .with(ZoomingSystem, "zooming_system", &["input_system"])
+        .with(PanningSystem, "panning_system", &["input_system"]);
 
     let mut world = World::new();
     let mut game = Application::new(assets_dir, Simulator::default(), game_data)?;
