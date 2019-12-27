@@ -12,3 +12,17 @@ There will also be the ability to interact with the simulation:
 + The user will be able to press a button to advance the simulation to the next "day", or some other "tick" of the simulation.
 
 The general idea is that this simulation would be useful for running a table-top RPG set in the Zone.
+
+## Building
+I'm using features from the nightly rust channel. So to build, you may need to install the nightly version using rustc:
+```bash
+rustup install nightly
+```
+and then build with:
+```bash
+cargo +nightly build
+# or
+cargo +nightly run
+```
+
+This project is powered by [amethyst](https://amethyst.rs/). The first-time build might take a long time, since it pulls down a bunch of dependencies.

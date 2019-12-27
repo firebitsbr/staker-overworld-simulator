@@ -1,13 +1,12 @@
 //! Components useful for defining Non-Player Characters, like
 //! monsters, other human characters.
 
-use specs::{
-    Component, VecStorage
+use amethyst::{
+    ecs::prelude::{Component, VecStorage},
 };
 
 /// Component for entities that have names used for displays
-#[derive(Debug, Component)]
-#[storage(VecStorage)]
+#[derive(Debug)]
 pub struct Named {
     /// Full name, including any formal title
     full_name: String,
@@ -15,12 +14,19 @@ pub struct Named {
     nickname: Option<String>,
 }
 
+impl Component for Named {
+    type Storage = VecStorage<Self>;
+}
+
 /// Component used for entities that belong to a certain faction or
 /// have faction relationships.
-#[derive(Debug, Component)]
-#[storage(VecStorage)]
+#[derive(Debug)]
 pub struct Faction {
     faction_name: String,
+}
+
+impl Component for Faction {
+    type Storage = VecStorage<Self>;
 }
 
 /// The relationship status of a given faction to another.
