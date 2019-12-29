@@ -4,8 +4,9 @@ use amethyst::{
     core::transform::Transform,
     ecs::prelude::{Component, DenseVecStorage, Entity},
     prelude::*,
-    renderer::{Camera, ImageFormat, SpriteRender, SpriteSheet, SpriteSheetFormat, Texture},
+    renderer::{Camera, camera::Projection, ImageFormat, SpriteRender, SpriteSheet, SpriteSheetFormat, Texture},
     ui::{Anchor, TtfFormat, UiText, UiTransform},
+    utils::auto_fov::AutoFov,
 };
 
 use crate::components::map::{Zoomable, Pannable};
@@ -80,10 +81,17 @@ fn initialize_camera(world: &mut World) {
     // Setup camera in a way that our screen covers whole arena and (0, 0) is in the bottom left.
     let mut transform = Transform::default();
     transform.set_translation_xyz(MAP_WIDTH * 0.0, MAP_HEIGHT * 0.0, 1000.0);
-
+    let mut cam = Camera::standard_3d(MAP_WIDTH, MAP_HEIGHT);
+    {
+        let proj = cam.projection_mut();
+        let per = proj.as_perspective_mut().unwrap();
+        println!("zMin: {}, zmax: {}", per.near(), per.far());
+        per.set_far(10_000.0);        
+        println!("zMin: {}, zmax: {}", per.near(), per.far());
+    }
     world
         .create_entity()
-        .with(Camera::standard_3d(MAP_WIDTH, MAP_HEIGHT))
+        .with(cam)
         .with(transform)
         .with(Zoomable {
             min_zoom: 0.0,
@@ -97,5 +105,6 @@ fn initialize_camera(world: &mut World) {
             max_x: 1024.0,
             max_y: 2048.0,
         })
+        .with(AutoFov::new())
         .build();
 }

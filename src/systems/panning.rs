@@ -23,7 +23,6 @@ impl<'s> System<'s> for PanningSystem {
                 let current_x = local.translation().x;
                 let new_x = (current_x + pan_x_value * pan_control.pan_rate);
                 let clamped_x = new_x.clamp_range(pan_control.min_x, pan_control.max_y);
-                println!("new_x: {} - clamped_x: {}", new_x, clamped_x);
                 local.set_translation_x(
                     clamped_x,
                 );
@@ -32,7 +31,6 @@ impl<'s> System<'s> for PanningSystem {
                 let current_y = local.translation().y;
                 let new_y = (current_y + pan_y_value * pan_control.pan_rate);
                 let clamped_y = new_y.clamp_range(pan_control.min_y, pan_control.max_y);
-                println!("new_y: {} - clamped_y: {}", new_y, clamped_y);
                 local.set_translation_y(
                     clamped_y,
                 );

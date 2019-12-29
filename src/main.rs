@@ -24,7 +24,7 @@ use amethyst::{
         RenderingBundle,
     },
     ui::{RenderUi, UiBundle},
-    utils::application_root_dir,
+    utils::{application_root_dir, auto_fov::AutoFovSystem},
 };
 
 fn main() -> amethyst::Result<()> {
@@ -60,6 +60,7 @@ fn main() -> amethyst::Result<()> {
         .with_bundle(input_bundle)?
         // Add the transform bundle which handles tracking entity positions
         .with_bundle(TransformBundle::new())?
+        .with(AutoFovSystem::new(), "fov_system", &[])
         .with(ZoomingSystem, "zooming_system", &["input_system"])
         .with(PanningSystem, "panning_system", &["input_system"]);
 
