@@ -2,6 +2,9 @@
 
 //! Hello world
 
+mod utilities;
+use crate::utilities::*;
+
 mod components;
 use crate::components::*;
 

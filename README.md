@@ -26,3 +26,11 @@ cargo +nightly run
 ```
 
 This project is powered by [amethyst](https://amethyst.rs/). The first-time build might take a long time, since it pulls down a bunch of dependencies.
+
+## Running
+### Windows
+`cargo +nightly run` should work out of the box on windows.
+
+### Linux
+Install the dependencies required by Amethyst to compile and run.
+`export WINIT_UNIX_BACKEND=x11` to avoid an issue documented here: https://github.com/amethyst/space-menace/issues/32
