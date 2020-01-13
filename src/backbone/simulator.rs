@@ -9,7 +9,7 @@ use amethyst::{
     utils::auto_fov::AutoFov,
 };
 
-use crate::components::map::{Zoomable, Pannable};
+use crate::components::map::{Zoomable, Pannable, CameraLimits};
 
 /// default size of the map
 /// TODO: make this a runtime resource
@@ -105,6 +105,7 @@ fn initialize_camera(world: &mut World) {
             max_x: 1024.0,
             max_y: 2048.0,
         })
+        .with(CameraLimits::new())
         .with(AutoFov::new())
         .build();
 }

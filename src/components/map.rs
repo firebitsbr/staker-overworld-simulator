@@ -2,7 +2,8 @@ use amethyst::{
     assets::{AssetStorage, Handle, Loader},
     core::timing::Time,
     core::transform::Transform,
-    ecs::prelude::{Component, VecStorage, DenseVecStorage, Entity},
+    core::math::geometry::Point3,
+    ecs::prelude::{Component, DenseVecStorage, Entity, VecStorage},
     prelude::*,
     renderer::{Camera, ImageFormat, SpriteRender, SpriteSheet, SpriteSheetFormat, Texture},
     ui::{Anchor, TtfFormat, UiText, UiTransform},
@@ -46,4 +47,23 @@ pub struct Pannable {
 
 impl Component for Pannable {
     type Storage = DenseVecStorage<Self>;
+}
+
+#[derive(Debug)]
+pub struct CameraLimits {
+    pub min: Point3<f32>,
+    pub max: Point3<f32>,
+}
+
+impl Component for CameraLimits {
+    type Storage = DenseVecStorage<Self>;
+}
+
+impl CameraLimits {
+    pub fn new() -> Self{
+        return CameraLimits{
+            min: Point3::<f32>::new(0.0, 0.0, 0.0),
+            max: Point3::<f32>::new(0.0, 0.0, 0.0),
+        }
+    }
 }

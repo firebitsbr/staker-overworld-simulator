@@ -62,7 +62,8 @@ fn main() -> amethyst::Result<()> {
         .with_bundle(TransformBundle::new())?
         .with(AutoFovSystem::new(), "fov_system", &[])
         .with(ZoomingSystem, "zooming_system", &["input_system"])
-        .with(PanningSystem, "panning_system", &["input_system"]);
+        .with(CameraLimitsSystem, "camlimits_system", &["zooming_system"])
+        .with(PanningSystem, "panning_system", &["input_system", "camlimits_system"]);
 
     let mut world = World::new();
     let mut game = Application::new(assets_dir, Simulator::default(), game_data)?;
