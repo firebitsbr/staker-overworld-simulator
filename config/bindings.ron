@@ -1,7 +1,7 @@
 (
   axes: {
     "map_zoom": MouseWheel(horizontal: false),
-    "map_pan_x": Emulated(pos: Key(A), neg: Key(D)),
+    "map_pan_x": Emulated(pos: Key(D), neg: Key(A)),
     "map_pan_y": Emulated(pos: Key(W), neg: Key(S)),
   },
   actions: {},

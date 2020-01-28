@@ -1,5 +1,5 @@
 use amethyst::{
-    core::{SystemDesc, Transform},
+    core::{SystemDesc, Transform, Time},
     derive::SystemDesc,
     ecs::prelude::{Join, Read, ReadStorage, System, SystemData, World, WriteStorage},
     input::{InputHandler, StringBindings},
@@ -17,10 +17,12 @@ impl<'s> System<'s> for PanningSystem {
         ReadStorage<'s, CameraLimits>,
         WriteStorage<'s, Transform>,
         Read<'s, InputHandler<StringBindings>>,
+        Read<'s, Time>,
     );
 
-    fn run(&mut self, (pan_controls, camera_limits, mut locals, input): Self::SystemData) {
+    fn run(&mut self, (pan_controls, camera_limits, mut locals, input, time): Self::SystemData) {
         for (pan_control, limits, local) in (&pan_controls, &camera_limits, &mut locals).join() {
+            let delta_time = time.delta_seconds();
             if let Some(pan_x_value) = input.axis_value("map_pan_x") {
                 let current_x = local.translation().x;
                 let new_x = (current_x + pan_x_value * pan_control.pan_rate);

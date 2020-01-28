@@ -2,7 +2,11 @@
 //! monsters, other human characters.
 
 use amethyst::{
-    ecs::prelude::{Component, VecStorage},
+    assets::{PrefabData},
+    ecs::{Component, VecStorage, DenseVecStorage, Entity, NullStorage, WriteStorage},
+    derive::PrefabData,
+    core::math::Vector3,
+    Error,
 };
 
 /// Component for entities that have names used for displays
@@ -37,4 +41,15 @@ pub enum FactionRelation {
     Neutral,
     /// Friendly relationship, will assist in fights, will never attack.
     Friendly,
+}
+
+#[derive(Clone, smart_default::SmartDefault, Debug, PrefabData)]
+#[prefab(Component)]
+pub struct Movement {
+    #[default(Vector3::zeros())]
+    pub velocity: Vector3<f32>,
+    pub max_movement_speed: f32,
+}
+impl Component for Movement {
+    type Storage = DenseVecStorage<Self>;
 }

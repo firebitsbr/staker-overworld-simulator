@@ -5,6 +5,8 @@ authors = ["Garret Richardson <garret.richardson.481@my.csun.edu>"]
 edition = "2018"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+[dependencies]
+smart-default = "0.5.2"
 
 [dependencies.amethyst]
 version = "0.13"
