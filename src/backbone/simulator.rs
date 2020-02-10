@@ -4,12 +4,15 @@ use amethyst::{
     core::transform::Transform,
     ecs::prelude::{Component, DenseVecStorage, Entity},
     prelude::*,
-    renderer::{Camera, camera::Projection, ImageFormat, SpriteRender, SpriteSheet, SpriteSheetFormat, Texture},
+    renderer::{
+        camera::Projection, Camera, ImageFormat, SpriteRender, SpriteSheet, SpriteSheetFormat,
+        Texture,
+    },
     ui::{Anchor, TtfFormat, UiText, UiTransform},
     utils::auto_fov::AutoFov,
 };
 
-use crate::components::map::{Zoomable, Pannable, CameraLimits};
+use crate::components::map::{Pannable, Zoomable};
 
 /// default size of the map
 /// TODO: make this a runtime resource
@@ -86,7 +89,7 @@ fn initialize_camera(world: &mut World) {
         let proj = cam.projection_mut();
         let per = proj.as_perspective_mut().unwrap();
         println!("zMin: {}, zmax: {}", per.near(), per.far());
-        per.set_far(10_000.0);        
+        per.set_far(10_000.0);
         println!("zMin: {}, zmax: {}", per.near(), per.far());
     }
     world
@@ -94,18 +97,17 @@ fn initialize_camera(world: &mut World) {
         .with(cam)
         .with(transform)
         .with(Zoomable {
-            min_zoom: 0.0,
+            min_zoom: 10.0,
             max_zoom: 65536.0,
             zoom_rate: 20.0,
         })
         .with(Pannable {
             pan_rate: 20.0,
-            min_x: 0.0,
-            min_y: 0.0,
-            max_x: 1024.0,
-            max_y: 2048.0,
+            min_x: -1.0 * (MAP_WIDTH / 2.0),
+            min_y: -1.0 * (MAP_HEIGHT / 2.0),
+            max_x: (MAP_WIDTH / 2.0),
+            max_y: (MAP_HEIGHT / 2.0),
         })
-        .with(CameraLimits::new())
         .with(AutoFov::new())
         .build();
 }

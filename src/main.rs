@@ -37,7 +37,6 @@ fn main() -> amethyst::Result<()> {
 
     // assets config
     let assets_dir = app_root.join("assets");
-    
     // keyboard bindings
     let binding_path = app_root.join("config").join("bindings.ron");
     let input_bundle =
@@ -53,8 +52,8 @@ fn main() -> amethyst::Result<()> {
                 )
                 // RenderFlat2D plugin is used to render entities with a `SpriteRender` component.
                 .with_plugin(RenderFlat2D::default()),
-                // plugin for rendering GUI elements, like the score
-                // .with_plugin(RenderUi::default()),
+            // plugin for rendering GUI elements, like the score
+            // .with_plugin(RenderUi::default()),
         )?
         // Add the inpput bundle which handles keyboard / mouse input
         .with_bundle(input_bundle)?
@@ -62,8 +61,7 @@ fn main() -> amethyst::Result<()> {
         .with_bundle(TransformBundle::new())?
         .with(AutoFovSystem::new(), "fov_system", &[])
         .with(ZoomingSystem, "zooming_system", &["input_system"])
-        .with(CameraLimitsSystem, "camlimits_system", &["zooming_system"])
-        .with(PanningSystem, "panning_system", &["input_system", "camlimits_system"]);
+        .with(PanningSystem, "panning_system", &["input_system"]);
 
     let mut world = World::new();
     let mut game = Application::new(assets_dir, Simulator::default(), game_data)?;

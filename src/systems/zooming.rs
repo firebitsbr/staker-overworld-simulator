@@ -5,7 +5,8 @@ use amethyst::{
     input::{InputHandler, StringBindings},
 };
 
-use crate::components::map::{Zoomable};
+use crate::components::map::Zoomable;
+use crate::utilities::Clampable;
 
 pub struct ZoomingSystem;
 
@@ -21,10 +22,9 @@ impl<'s> System<'s> for ZoomingSystem {
             if let Some(zoom_value) = input.axis_value("map_zoom") {
                 let current_zoom = local.translation().z;
                 let new_zoom = (current_zoom + zoom_value * zoom_control.zoom_rate);
-                let clamped_zoom = new_zoom.min(zoom_control.min_zoom).max(zoom_control.max_zoom);
-                local.set_translation_z(
-                    new_zoom,
-                );
+                let clamped_zoom =
+                    new_zoom.clamp_range(zoom_control.min_zoom, zoom_control.max_zoom);
+                local.set_translation_z(clamped_zoom);
             }
         }
     }
