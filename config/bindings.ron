@@ -3,6 +3,10 @@
     "map_zoom": MouseWheel(horizontal: false),
     "map_pan_x": Emulated(pos: Key(D), neg: Key(A)),
     "map_pan_y": Emulated(pos: Key(W), neg: Key(S)),
+    "map_joystick_pan_x": Mouse(axis: X, over_extendable: true, radius: 10.0),
+    "map_joystick_pan_y": Mouse(axis: Y, over_extendable: true, radius: 10.0),  
   },
-  actions: {},
+  actions: {
+    "enable_joystick_pan": [[Key(LControl)]]
+  },
 )
