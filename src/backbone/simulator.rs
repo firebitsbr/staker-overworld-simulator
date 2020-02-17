@@ -111,3 +111,40 @@ fn initialize_camera(world: &mut World) {
         .with(AutoFov::new())
         .build();
 }
+
+/// Load a faction's badge based off of the provided name.
+fn load_faction_badge(world: &mut World, faction_name: &str) -> SpriteRender {
+    let texture_handle = {
+        let loader = world.read_resource::<Loader>();
+        let texture_storage = world.read_resource::<AssetStorage<Texture>>();
+        // load and return the texture handle
+        loader.load(
+            "texture/faction_badges/.png",
+            ImageFormat::default(),
+            (),
+            &texture_storage,
+        )
+    };
+
+    let loader = world.read_resource::<Loader>();
+    let sprite_sheet_store = world.read_resource::<AssetStorage<SpriteSheet>>();
+    let sprite_sheet_handle: Handle<SpriteSheet> = loader.load(
+        "texture/faction_badges/badge.ron", // Here we load the associated ron file
+        SpriteSheetFormat(texture_handle),
+        (),
+        &sprite_sheet_store,
+    );
+
+    return SpriteRender {
+        sprite_sheet: sprite_sheet_handle,
+        sprite_number: 0,
+    };
+}
+
+fn initialize_example_entities(world: &mut World) {
+    // world
+    //     .create_entity()
+    //     .with(sprite_render)
+    //     .with(local_transform)
+    //     .build();
+}
