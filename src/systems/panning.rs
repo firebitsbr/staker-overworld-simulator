@@ -1,9 +1,7 @@
 use amethyst::{
-    core::{SystemDesc, Time, Transform},
-    derive::SystemDesc,
-    ecs::prelude::{Join, Read, ReadStorage, System, SystemData, World, WriteStorage},
+    core::{Time, Transform},
+    ecs::prelude::{Join, Read, ReadStorage, System, WriteStorage},
     input::{InputHandler, StringBindings},
-    window::ScreenDimensions,
 };
 
 use crate::components::map::Pannable;
@@ -32,12 +30,12 @@ impl<'s> System<'s> for PanningSystem {
                 pan_y_value = -1.0 * input.axis_value("map_joystick_pan_y").unwrap_or(0.0);
             }
             let current_x = local.translation().x;
-            let new_x = (current_x + pan_x_value * pan_control.pan_rate);
+            let new_x = current_x + pan_x_value * pan_control.pan_rate;
             let clamped_x = new_x.clamp_range(pan_control.min_x, pan_control.max_x);
             local.set_translation_x(clamped_x);
 
             let current_y = local.translation().y;
-            let new_y = (current_y + pan_y_value * pan_control.pan_rate);
+            let new_y = current_y + pan_y_value * pan_control.pan_rate;
             let clamped_y = new_y.clamp_range(pan_control.min_y, pan_control.max_y);
             local.set_translation_y(clamped_y);
         }

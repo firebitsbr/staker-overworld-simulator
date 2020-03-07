@@ -1,5 +1,5 @@
 [package]
-name = "StalkerSim"
+name = "stalker_sim"
 version = "0.1.0"
 authors = ["Garret Richardson <garret.richardson.481@my.csun.edu>"]
 edition = "2018"

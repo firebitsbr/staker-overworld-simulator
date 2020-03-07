@@ -3,7 +3,7 @@
 
 use amethyst::{
     assets::{PrefabData},
-    ecs::{Component, VecStorage, DenseVecStorage, Entity, NullStorage, WriteStorage},
+    ecs::{Component, VecStorage, DenseVecStorage, Entity, WriteStorage},
     derive::PrefabData,
     core::math::Vector3,
     Error,

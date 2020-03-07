@@ -9,7 +9,7 @@ mod components;
 use crate::components::*;
 
 mod backbone;
-use crate::backbone::simulator::Simulator;
+use backbone::simulator::SimulatorRunState;
 
 mod systems;
 use crate::systems::*;
@@ -65,7 +65,7 @@ fn main() -> amethyst::Result<()> {
         .with(PanningSystem, "panning_system", &["input_system"]);
 
     let mut world = World::new();
-    let mut game = Application::new(assets_dir, Simulator::default(), game_data)?;
+    let mut game = Application::new(assets_dir, SimulatorRunState::default(), game_data)?;
     game.run();
 
     Ok(())

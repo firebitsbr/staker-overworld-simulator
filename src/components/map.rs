@@ -1,12 +1,6 @@
 use amethyst::{
-    assets::{AssetStorage, Handle, Loader},
-    core::math::geometry::Point3,
-    core::timing::Time,
-    core::transform::Transform,
-    ecs::prelude::{Component, DenseVecStorage, Entity, VecStorage},
+    ecs::prelude::{Component, DenseVecStorage, VecStorage},
     prelude::*,
-    renderer::{Camera, ImageFormat, SpriteRender, SpriteSheet, SpriteSheetFormat, Texture},
-    ui::{Anchor, TtfFormat, UiText, UiTransform},
 };
 
 /// Map coordinates, in terms of X/Y cartesian position and an optional Z-level.

@@ -1,14 +1,11 @@
 use amethyst::{
     assets::{AssetStorage, Handle, Loader},
-    core::timing::Time,
     core::transform::Transform,
-    ecs::prelude::{Component, DenseVecStorage, Entity},
     prelude::*,
     renderer::{
-        camera::Projection, Camera, ImageFormat, SpriteRender, SpriteSheet, SpriteSheetFormat,
+        Camera, ImageFormat, SpriteRender, SpriteSheet, SpriteSheetFormat,
         Texture,
     },
-    ui::{Anchor, TtfFormat, UiText, UiTransform},
     utils::auto_fov::AutoFov,
 };
 
@@ -22,11 +19,11 @@ pub const MAP_WIDTH: f32 = 1024.0;
 /// Struct for primary simulation application state, such as when
 /// the simulation is active and interactive
 #[derive(Default)]
-pub struct Simulator {
+pub struct SimulatorRunState {
     map_sprite_sheet_handle: Option<Handle<SpriteSheet>>,
 }
 
-impl SimpleState for Simulator {
+impl SimpleState for SimulatorRunState {
     fn on_start(&mut self, data: StateData<'_, GameData<'_, '_>>) {
         let world = data.world;
         self.map_sprite_sheet_handle.replace(load_map_sprite(world));
@@ -37,6 +34,20 @@ impl SimpleState for Simulator {
         initialize_camera(world);
     }
 }
+
+/// Struct for the beginning of the simulation, where the first entities need to be spawned.
+/// This state should typically just push onto the running state whenever the simulation
+/// needs to be initialized.
+#[derive(Default)]
+pub struct SimulatorInitializingState;
+
+impl SimpleState for SimulatorInitializingState {
+    fn on_start(&mut self, data: StateData<'_, GameData<'_, '_>>) {
+        let world = data.world;
+
+    }
+}
+
 
 /// Loads the map texture.
 /// TODO: Make this configurable at runtime.
