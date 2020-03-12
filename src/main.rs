@@ -3,9 +3,11 @@
 //! Hello world
 
 mod utilities;
+#[allow(unused_imports)]
 use crate::utilities::*;
 
 mod components;
+#[allow(unused_imports)]
 use crate::components::*;
 
 mod backbone;
@@ -23,7 +25,6 @@ use amethyst::{
         types::DefaultBackend,
         RenderingBundle,
     },
-    ui::{RenderUi, UiBundle},
     utils::{application_root_dir, auto_fov::AutoFovSystem},
 };
 
@@ -62,9 +63,11 @@ fn main() -> amethyst::Result<()> {
         .with_bundle(TransformBundle::new())?
         .with(AutoFovSystem::new(), "fov_system", &[])
         .with(ZoomingSystem, "zooming_system", &["input_system"])
-        .with(PanningSystem, "panning_system", &["input_system"]);
+        .with(PanningSystem, "panning_system", &["input_system"])
+        .with(MovementSystem, "movement_system", &[])
+        .with(PositionSystem, "position_system", &["movement_system"]);
 
-    let mut world = World::new();
+    // let mut world = World::new();
     let mut game = Application::new(assets_dir, SimulatorRunState::default(), game_data)?;
     game.run();
 

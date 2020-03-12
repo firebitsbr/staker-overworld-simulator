@@ -1,6 +1,7 @@
 use amethyst::{
     assets::{AssetStorage, Handle, Loader},
     core::transform::Transform,
+    core::math::Vector3,
     prelude::*,
     renderer::{
         Camera, ImageFormat, SpriteRender, SpriteSheet, SpriteSheetFormat,
@@ -10,7 +11,8 @@ use amethyst::{
     utils::auto_fov::AutoFov,
 };
 
-use crate::components::map::{Pannable, Zoomable};
+use crate::components::map::{Pannable, Zoomable, MapCoords};
+use crate::components::npc::{Movement};
 
 /// default size of the map
 /// TODO: make this a runtime resource
@@ -28,7 +30,6 @@ impl SimpleState for SimulatorRunState {
     fn on_start(&mut self, data: StateData<'_, GameData<'_, '_>>) {
         let world = data.world;
         self.map_sprite_sheet_handle.replace(load_map_sprite(world));
-
         world.register::<Zoomable>();
 
         initialize_map(world, self.map_sprite_sheet_handle.clone().unwrap());
@@ -47,7 +48,7 @@ impl SimpleState for SimulatorRunState {
     fn handle_event(&mut self, _data: StateData<'_, GameData<'_, '_>>, event: StateEvent) -> SimpleTrans {
         if let StateEvent::Window(event) = &event {
             if is_key_down(&event, VirtualKeyCode::Space) {
-                return Trans::Push(Box::new(SimulatorInitializingState));
+                return Trans::Push(Box::new(SimulatorInitializingState::default()));
             }
         }
         Trans::None
@@ -58,13 +59,16 @@ impl SimpleState for SimulatorRunState {
 /// This state should typically just push onto the running state whenever the simulation
 /// needs to be initialized.
 #[derive(Default)]
-pub struct SimulatorInitializingState;
+pub struct SimulatorInitializingState {
+    faction_sprite_sheet_handle: Option<Handle<SpriteSheet>>,
+}
 
 impl SimpleState for SimulatorInitializingState {
     fn on_start(&mut self, data: StateData<'_, GameData<'_, '_>>) {
         println!("Initializing simulation prefab entities.");
         let world = data.world;
-        initialize_example_entities(world);
+        self.faction_sprite_sheet_handle.replace(load_faction_sprite(world));
+        initialize_example_entities(world, self.faction_sprite_sheet_handle.clone().unwrap());
     }
 
     fn handle_event(&mut self, _data: StateData<'_, GameData<'_, '_>>, event: StateEvent) -> SimpleTrans {
@@ -105,7 +109,7 @@ fn load_map_sprite(world: &mut World) -> Handle<SpriteSheet> {
 
 fn initialize_map(world: &mut World, map_sprite_sheet_handle: Handle<SpriteSheet>) {
     // Create the translation.
-    let mut local_transform = Transform::default();
+    let local_transform = Transform::default();
 
     // Assign the sprite for the map
     let sprite_render = SpriteRender {
@@ -153,7 +157,7 @@ fn initialize_camera(world: &mut World) {
 }
 
 /// Load a faction's badge based off of the provided name.
-fn load_faction_badge(world: &mut World, faction_name: &str) -> SpriteRender {
+fn load_faction_sprite(world: &mut World) -> Handle<SpriteSheet> {
     let texture_handle = {
         let loader = world.read_resource::<Loader>();
         let texture_storage = world.read_resource::<AssetStorage<Texture>>();
@@ -175,18 +179,27 @@ fn load_faction_badge(world: &mut World, faction_name: &str) -> SpriteRender {
         &sprite_sheet_store,
     );
 
-    return SpriteRender {
-        sprite_sheet: sprite_sheet_handle,
-        sprite_number: 0,
-    };
+    return sprite_sheet_handle;
 }
 
-fn initialize_example_entities(world: &mut World) {
-    let mut local_transform = Transform::default();
-    let sprite_render = load_faction_badge(world, "bandits");
+fn initialize_example_entities(world: &mut World, faction_sprite: Handle<SpriteSheet>) {
+    let local_transform = Transform::default();
+    let sprite_render = SpriteRender {
+        sprite_sheet: faction_sprite,
+        sprite_number: 0,
+    };
+
     world
         .create_entity()
         .with(sprite_render)
         .with(local_transform)
+        .with(MapCoords {
+            x: 0.0,
+            y: 0.0,
+            z: 0.0,
+        })
+        .with(Movement {
+            velocity: Vector3::new(2.0, 2.0, 0.0),
+        })
         .build();
 }

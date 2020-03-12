@@ -1,3 +1,4 @@
+#[allow(unused_imports)]
 use amethyst::{
     ecs::prelude::{Component, DenseVecStorage, VecStorage},
     prelude::*,
@@ -8,12 +9,12 @@ use amethyst::{
 pub struct MapCoords {
     /// The X position on a map. The origin is on the upper-left corner, increasing
     /// as it moves rightwards.
-    x: f64,
+    pub x: f32,
     /// The Y position on a map. The origin is on the upper-left corner, increasing
     /// as it moves downwards.
-    y: f64,
+    pub y: f32,
     /// A description of the "vertical" position of the coordinates.
-    z: f64,
+    pub z: f32,
 }
 
 impl Component for MapCoords {
