@@ -53,3 +53,16 @@ pub struct Movement {
 impl Component for Movement {
     type Storage = DenseVecStorage<Self>;
 }
+
+/// Sprite resource and position used for an entities display on
+/// the map.
+#[derive(Clone, smart_default::SmartDefault, Debug, PrefabData)]
+#[prefab(Component)]
+pub struct MapDisplay {
+    #[default(Vector3::zeros())]
+    pub velocity: Vector3<f32>,
+    pub max_movement_speed: f32,
+}
+impl Component for MapDisplay {
+    type Storage = DenseVecStorage<Self>;
+}

@@ -6,6 +6,7 @@ use amethyst::{
         Camera, ImageFormat, SpriteRender, SpriteSheet, SpriteSheetFormat,
         Texture,
     },
+    input::{VirtualKeyCode, is_key_down},
     utils::auto_fov::AutoFov,
 };
 
@@ -32,6 +33,24 @@ impl SimpleState for SimulatorRunState {
 
         initialize_map(world, self.map_sprite_sheet_handle.clone().unwrap());
         initialize_camera(world);
+        println!("Simulation started.");
+    }
+
+    fn on_pause(&mut self,_data: StateData<'_, GameData<'_, '_>>) {
+        println!("Pause simulation run state.");
+    }
+
+    fn on_resume(&mut self,_data: StateData<'_, GameData<'_, '_>>) {
+        println!("Resuming simulation run state.");
+    }
+
+    fn handle_event(&mut self, _data: StateData<'_, GameData<'_, '_>>, event: StateEvent) -> SimpleTrans {
+        if let StateEvent::Window(event) = &event {
+            if is_key_down(&event, VirtualKeyCode::Space) {
+                return Trans::Push(Box::new(SimulatorInitializingState));
+            }
+        }
+        Trans::None
     }
 }
 
@@ -43,8 +62,18 @@ pub struct SimulatorInitializingState;
 
 impl SimpleState for SimulatorInitializingState {
     fn on_start(&mut self, data: StateData<'_, GameData<'_, '_>>) {
+        println!("Initializing simulation prefab entities.");
         let world = data.world;
+        initialize_example_entities(world);
+    }
 
+    fn handle_event(&mut self, _data: StateData<'_, GameData<'_, '_>>, event: StateEvent) -> SimpleTrans {
+        if let StateEvent::Window(event) = &event {
+            if is_key_down(&event, VirtualKeyCode::Space) {
+                return Trans::Pop;
+            }
+        }
+        Trans::None
     }
 }
 
@@ -130,7 +159,7 @@ fn load_faction_badge(world: &mut World, faction_name: &str) -> SpriteRender {
         let texture_storage = world.read_resource::<AssetStorage<Texture>>();
         // load and return the texture handle
         loader.load(
-            "texture/faction_badges/.png",
+            "texture/faction_badges/Bandits.png",
             ImageFormat::default(),
             (),
             &texture_storage,
@@ -153,9 +182,11 @@ fn load_faction_badge(world: &mut World, faction_name: &str) -> SpriteRender {
 }
 
 fn initialize_example_entities(world: &mut World) {
-    // world
-    //     .create_entity()
-    //     .with(sprite_render)
-    //     .with(local_transform)
-    //     .build();
+    let mut local_transform = Transform::default();
+    let sprite_render = load_faction_badge(world, "bandits");
+    world
+        .create_entity()
+        .with(sprite_render)
+        .with(local_transform)
+        .build();
 }

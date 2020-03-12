@@ -20,10 +20,14 @@ impl Component for MapCoords {
     type Storage = VecStorage<Self>;
 }
 
+/// Indicates the max/min zoom rate for a camera or similar entity
 #[derive(Debug)]
 pub struct Zoomable {
+    /// minimum zoom level
     pub min_zoom: f32,
+    /// maximum zoom level
     pub max_zoom: f32,
+    /// speed of zoom level changes
     pub zoom_rate: f32,
 }
 
@@ -42,3 +46,4 @@ pub struct Pannable {
 impl Component for Pannable {
     type Storage = DenseVecStorage<Self>;
 }
+
