@@ -5,7 +5,9 @@ use amethyst::{
 };
 
 /// Map coordinates, in terms of X/Y cartesian position and an optional Z-level.
-#[derive(Debug)]
+#[derive(Clone, Copy, Component, Debug, Default, Deserialize, Serialize, PrefabData)]
+#[prefab(Component)]
+#[serde(deny_unknown_fields)]
 pub struct MapCoords {
     /// The X position on a map. The origin is on the upper-left corner, increasing
     /// as it moves rightwards.

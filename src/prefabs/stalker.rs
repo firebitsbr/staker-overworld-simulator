@@ -10,8 +10,9 @@ use crate::components::map::MapCoords;
 use crate::components::npc::{Named, Movement};
 
 #[derive(Debug, Deserialize, Serialize, PrefabData)]
+#[serde(deny_unknown_fields)]
 pub struct Stalker {
-    player: Named,
+    name: Named,
     position: MapCoords,
     movement: Movement,
 }

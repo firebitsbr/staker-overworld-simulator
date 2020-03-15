@@ -8,9 +8,13 @@ use amethyst::{
     core::math::Vector3,
     Error,
 };
+use serde::{Deserialize, Serialize};
+
 
 /// Component for entities that have names used for displays
-#[derive(Debug)]
+#[derive(Clone, Copy, Component, Debug, Default, Deserialize, Serialize, PrefabData)]
+#[prefab(Component)]
+#[serde(deny_unknown_fields)]
 pub struct Named {
     /// Full name, including any formal title
     full_name: String,

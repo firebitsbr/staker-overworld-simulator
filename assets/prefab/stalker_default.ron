@@ -1,0 +1,12 @@
+#![enable(implicit_some)]
+
+Prefab(
+    entities: [
+        PrefabEntity (
+            data: Stalker(
+                name: Named(full_name: "Sgt Garret", nickname: None),
+                position: MapCoords(x: 0.0, y: 0.0, z: 1.0),
+            )
+        )
+    ]
+)
